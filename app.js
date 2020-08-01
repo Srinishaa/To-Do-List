@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser")
 const date = require(__dirname + "/date.js");
-const _ = require("lodash")
+const _ = require("lodash");
 app.use(function(req, res, next) {
 
   if (req.originalUrl && req.originalUrl.split("/").pop() === 'favicon.ico') {
@@ -177,6 +177,7 @@ app.post("/addList", function(req, res) {
 app.listen(process.env.PORT || 3000, function() {
   console.log("Server running on port 3000");
 })
+
 
 // https://agile-sands-40636.herokuapp.com/
 // "mongodb+srv://admin_nisha:Star123@cluster0.waeg9.mongodb.net/todolistDB"

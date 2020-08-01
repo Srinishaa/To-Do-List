@@ -1,6 +1,6 @@
 <%-include("header")-%>
 
-<body>
+<body >
 
   <h1 class="box heading"><%= listName %></h1>
   <div class="box">
@@ -24,10 +24,9 @@
   <div class=box>
     <form class="item " action="/addList" method="post">
       <input type="text" name="listName" placeholder="List Name" autocomplete="off">
-      <button type="submit" name="button1">+</button>
+      <button type="submit" name="button1" onclick="alert('You can access you custom list by typing your list name after https://agile-sands-40636.herokuapp.com/'+'\n'+'Happy Listing!');">+</button>
     </form>
   </div>
-
 </body>
 
 </html>
