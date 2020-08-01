@@ -18,8 +18,13 @@ h1 {
   box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
 }
 
-#heading {
+.heading {
   background-color: #A683E3;
+  text-align: center;
+}
+.sub-heading{
+  color: black;
+  background-color: #E4E9FD;
   text-align: center;
 }
 

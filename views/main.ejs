@@ -14,17 +14,20 @@
       <% }) %>
       <input type="hidden" name="listName" value="<%=listName%>">
     </form>
-
-
-
-
-
     <form class="item " action="/" method="post">
       <input type="text" name="newItem" placeholder="NEW ITEM" autocomplete="off">
       <button type="submit" name="button" value=<%=listName%>>+</button>
     </form>
 
   </div>
+  <h1 class=" box sub-heading">Create your custom List!</h1>
+  <div class=box>
+    <form class="item " action="/addList" method="post">
+      <input type="text" name="listName" placeholder="List Name" autocomplete="off">
+      <button type="submit" name="button1">+</button>
+    </form>
+  </div>
+
 </body>
 
 </html>
