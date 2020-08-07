@@ -14,9 +14,9 @@
       <% }) %>
       <input type="hidden" name="listName" value="<%=listName%>">
     </form>
-    <form class="item " action="/" method="post">
+    <form class="item " action="/login0.1" method="post">
       <input type="text" name="newItem" placeholder="NEW ITEM" autocomplete="off">
-      <button type="submit" name="button" value=<%=listName%>>+</button>
+      <button class="b" type="submit" name="button" value=<%=listName%>>+</button>
     </form>
 
   </div>
@@ -24,7 +24,7 @@
   <div class=box>
     <form class="item " action="/addList" method="post">
       <input type="text" name="listName" placeholder="List Name" autocomplete="off">
-      <button type="submit" name="button1" onclick="alert('You can access you custom list by typing your list name after https://agile-sands-40636.herokuapp.com/'+'\n'+'Happy Listing!');">+</button>
+      <button class="b" type="submit" name="button1">+</button>
     </form>
   </div>
 </body>

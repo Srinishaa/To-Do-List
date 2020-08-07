@@ -61,7 +61,7 @@ form.item {
   margin-left: 20px;
 }
 
-button {
+.b {
   min-height: 50px;
   width: 50px;
   border-radius: 50%;
@@ -97,5 +97,11 @@ input[type="text"]:focus {
 footer {
   color: white;
   color: rgba(0, 0, 0, 0.5);
-  text-align: center;
+
+}
+.button3{
+  font-size: 20px;
+  float: right;
+  margin-right: 100px;
+  color: #A683E3;
 }

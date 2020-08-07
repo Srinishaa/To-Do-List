@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>To do List</title>
+  <style>
+    .home{
+margin:100px;
+    }
+    #login,#register{
+margin:200px;
+    }
+    .jumbotron{
+      text-align:center;
+      background-color: #E4E9FD;
+      background-image: -webkit-linear-gradient(65deg, #A683E3 50%, #E4E9FD 50%);
+font-family: 'helvetica neue';
+    }
+    .btn{
+      margin:10px;
+    }
+
+  </style>
+</head>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+
+<div class="jumbotron centered">
+  <div class="container home">
+      <i class="fas fa-list fa-7x"></i>
+    <h1 class="display-3">Listify</h1>
+    <p class="lead">Ready to List?!</p>
+    <hr>
+
+    <a class="btn btn-light btn-lg" href="#register" role="button">Register</a>
+    <a class="btn btn-dark btn-lg" href="#login" role="button">Login</a>
+
+  </div>
+</div>
+
+
+<
+<div class="container mt-5" id="login">
+  <h1>Login</h1>
+
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-body">
+
+          <!-- Makes POST request to /login route -->
+
+          <form action="/login" method="POST">
+            <div class="form-group">
+              <label for="email">Username</label>
+              <input type="username" class="form-control" name="username">
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" name="password">
+            </div>
+            <button type="submit" class="btn btn-dark">Login</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <a class="btn btn-block" href="/auth/google" role="button">
+            <i class="fab fa-google"></i>
+            Sign In with Google
+          </a>
+        </div>
+      </div>
+    </div> -->
+
+  </div>
+</div>
+<div class="container mt-5" id="register">
+<h1>Register</h1>
+
+<div class="row">
+  <div class="col-sm-8">
+    <div class="card">
+      <div class="card-body">
+
+        <!-- Makes POST request to /register route -->
+        <form action="/register" method="POST">
+          <div class="form-group">
+
+            <label for="email">Username</label>
+            <input type="username" class="form-control" name="username">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" name="password">
+          </div>
+          <button type="submit" class="btn btn-dark">Register</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="col-sm-4">
+    <div class="card social-block">
+      <div class="card-body">
+        <a class="btn btn-block" href="/auth/google" role="button">
+          <i class="fab fa-google"></i>
+          Sign Up with Google
+        </a>
+      </div>
+    </div>
+  </div> -->
+
+</div>
+</div>
+  </div>
+<%- include('footer') %>

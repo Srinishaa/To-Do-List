@@ -1,7 +1,7 @@
-<%-include("header")-%>
-
+<%-include("header.ejs")-%>
 <body>
 
+  <a href="/login" class="button3">Home</a>
   <h1 class="box heading"><%= listName %></h1>
   <div class="box">
     <%  newItemList.forEach(function(item){%>
@@ -15,11 +15,10 @@
       <input type="hidden" name="listName" value="<%=listName%>">
     </form>
 
-    <form class="item " action="/" method="post">
+    <form class="item " action="/login0.1" method="post">
       <input type="text" name="newItem" placeholder="NEW ITEM" autocomplete="off">
-      <button type="submit" name="button" value=<%=listName%>>+</button>
+      <button class="b" type="submit" name="button" value=<%=listName%>>+</button>
     </form>
-
   </div>
 
 </body>

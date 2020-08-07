@@ -1,0 +1,11 @@
+{
+  user.findOne({username:userZ.username},function(err,response){
+    if(!err)
+    {
+      res.render("main",{
+        listName: date.getDate(),
+        newItemList: response.list
+          })
+    }
+  })
+  }
