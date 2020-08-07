@@ -17,7 +17,7 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/todolistDB", {
+mongoose.connect("mongodb+srv://admin_nisha:Star123@cluster0.waeg9.mongodb.net/todolistDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
