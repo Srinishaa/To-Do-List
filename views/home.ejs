@@ -20,7 +20,9 @@ font-family: 'helvetica neue';
     .btn{
       margin:10px;
     }
-
+.alert{
+  color:red;
+}
   </style>
 </head>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
@@ -53,6 +55,10 @@ font-family: 'helvetica neue';
           <!-- Makes POST request to /login route -->
 
           <form action="/login" method="POST">
+            <%if(error=="error"||error=="notFound") {%>
+              <p class="alert">
+              **Please register**
+              </p><%}%>
             <div class="form-group">
               <label for="email">Username</label>
               <input type="username" class="form-control" name="username">
@@ -67,19 +73,7 @@ font-family: 'helvetica neue';
         </div>
       </div>
     </div>
-
-    <!-- <div class="col-sm-4">
-      <div class="card">
-        <div class="card-body">
-          <a class="btn btn-block" href="/auth/google" role="button">
-            <i class="fab fa-google"></i>
-            Sign In with Google
-          </a>
-        </div>
-      </div>
-    </div> -->
-
-  </div>
+</div>
 </div>
 <div class="container mt-5" id="register">
 <h1>Register</h1>
@@ -92,7 +86,10 @@ font-family: 'helvetica neue';
         <!-- Makes POST request to /register route -->
         <form action="/register" method="POST">
           <div class="form-group">
-
+            <%if(error=="error") {%>
+              <p class="alert">
+              **Try new username**
+              </p><%}%>
             <label for="email">Username</label>
             <input type="username" class="form-control" name="username">
           </div>
@@ -102,23 +99,12 @@ font-family: 'helvetica neue';
           </div>
           <button type="submit" class="btn btn-dark">Register</button>
         </form>
-
       </div>
     </div>
   </div>
-
-  <!-- <div class="col-sm-4">
-    <div class="card social-block">
-      <div class="card-body">
-        <a class="btn btn-block" href="/auth/google" role="button">
-          <i class="fab fa-google"></i>
-          Sign Up with Google
-        </a>
-      </div>
-    </div>
-  </div> -->
-
 </div>
 </div>
   </div>
+
+
 <%- include('footer') %>

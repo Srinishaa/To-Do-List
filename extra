@@ -9,3 +9,61 @@
     }
   })
   }
+///-------////---------------------------------------------------------------------//////////////////
+
+
+// app.get("/login/:category"||"/delete/:category"||"/login0.1/:category", function(req, res) {
+//   const category = _.capitalize(req.params.category);
+//   user.findOne({
+//     {username:userZ.username}
+//   }, function(err, result) {
+//     // console.log(result);
+//     if (err)
+//       console.log(err);
+//     else {
+//       if (!result) {
+//
+//
+//           user.updateOne({username:userZ.username},{$push:{newList:{list:defaultItems,name:category}}}, function(err) {
+//               if (err)
+//                 console.log(err);
+//               else{
+//                 user.findOne({username:userZ.username},function(err,response){
+//                   if(!err)
+//                   {
+//                       // console.log(response.newList);
+//                       (response.newList).forEach(function(item){
+//                         if(item.name==category){
+//                           console.log(item.list);
+//                           res.render("list",{
+//                           listName:item.name,
+//                           newItemList:item.list
+//                             })
+//                         }
+//                       })
+//
+//                   }
+//                 })
+//                 }
+//                 });
+//
+//       } else {
+//         user.findOne({username:userZ.username},function(err,response){
+//           if(!err)
+//           {
+//
+//               (response.newList).forEach(function(item){
+//                 if(item.name==category){
+//                   res.render("list",{
+//                   listName:item.name,
+//                   newItemList:item.list
+//                     })
+//                 }
+//               })
+//
+//           }
+//         })
+//         }
+//     }
+//   })
+// })

@@ -4,6 +4,7 @@ const bodyParser = require("body-parser")
 const date = require(__dirname + "/date.js");
 const _ = require("lodash");
 const md5=require("md5");
+require("dotenv").config();
 app.use(function(req, res, next) {
 if (req.originalUrl && req.originalUrl.split("/").pop() === 'favicon.ico') {
   return res.sendStatus(204);
@@ -17,7 +18,7 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 const mongoose = require("mongoose");
-mongoose.connect("mongodb+srv://admin_nisha:Star123@cluster0.waeg9.mongodb.net/todolistDB", {
+mongoose.connect("mongodb+srv://admin_nisha:+"password"@cluster0.waeg9.mongodb.net/todolistDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
@@ -52,331 +53,272 @@ const userSchema = new mongoose.Schema({
   newList:[listSchema]
 });
 const user = mongoose.model("user", userSchema);
-let userZ=[];
-let charles;
-
-//--------
+let userZ;
+let x;
 
 
 app.post("/register", function(req, res) {
-console.log(req.body.username);
-  const userX = new user({
-    username:req.body.username,
-    password:md5(req.body.password)
+  user.findOne({
+    username: req.body.username
+  }, function(err, foundUser) {
+    if (foundUser == null) {
+      const userX = new user({
+        username: req.body.username,
+        password: md5(req.body.password)
+      })
+      userX.save(function(err) {
+        user.findOne({
+          username: req.body.username
+        }, function(err, results) {
+          // console.log(results.list);
+          user.update({
+            username: req.body.username
+          }, {
+            $set: {
+              list: defaultItems
+            }
+          }, function(err) {
+            if (err)
+              console.log(err);
+            else {
+              res.redirect("/#login")
+              console.log("succesfully added!");
+            }
+          });
+        })
+      })
+    } else {
+      res.render("home", {
+        error: "error"
+      })
+    }
   })
-  userX.save(function(err) {
-    user.findOne({username:req.body.username}, function(err, results) {
-    // console.log(results.list);
-    user.update({username:req.body.username},{$set:{list:defaultItems}}, function(err) {
-          if (err)
-            console.log(err);
-          else{
-          res.redirect("/#login")
-          console.log("succesfully added!");
-          }
-            });
-    })
-    })
-  })
+})
 
 app.post("/login", function(req, res) {
   user.findOne({
     username: req.body.username
-  }, function(err,abc) {
-         userZ=abc;
-    if (!err) {
-      if (abc.password ==md5(req.body.password)) {
-        user.findOne({username:req.body.username}, function(err, results) {
-        // console.log(results.list);
-          if (results.list.length == 0) {
-          user.update({username:req.body.username},{$set:{list:defaultItems}}, function(err) {
-              if (err)
-                console.log(err);
-              else{
-                user.findOne({username:userZ.username},function(err,response){
-                  if(!err)
-                  {
-                    res.render("main",{
-                      listName: date.getDate(),
-                      newItemList: response.list
-                        })
-                  }
-                })
-                }
-            });
-          }
-           else {
-            // console.log(results);
-            res.render("main", {
-              listName: date.getDate(),
-              newItemList: results.list
-            })
-          }
+  }, function(err, results) {
+    if (results == null) {
+      res.render("home", {
+        error: "notFound"
+      })
+    } else if (!err) {
+      userZ = results;
+      if (results.password == md5(req.body.password)) {
+        if (results.list.length == 0) {
+          user.update({
+            username: req.body.username
+          }, {
+            $set: {
+              list: defaultItems
+            }
+          }, function(err) {
+            if (err)
+              console.log(err);
+            else {
+              res.render("main", {
+                listName: date.getDate(),
+                newItemList: results.list
+              })
+            }
+          });
+        } else {
+          res.render("main", {
+            listName: date.getDate(),
+            newItemList: results.list
           })
-          }
-          }
-          })
-          })
+        }
+      }
+    }
+  })
+})
 app.get("/", function(req, res) {
-res.render("home")
+  res.render("home", {
+    error: "success"
+  })
 });
 
 app.post("/login0.1", function(req, res) {
   const item = req.body.newItem;
-  // console.log(req.body.button);
-  const abc = req.body.button;
+  const button = req.body.button;
   const itemName = new Item({
     name: item
   });
-  if (abc === date.getDay() + ",") {
+  if (button === date.getDay() + ",") {
     userZ.list.push(itemName);
-    userZ.save(function(err){
-      if(!err){
-        user.findOne({username:userZ.username},function(err,response){
-          if(!err)
-          {
-            res.render("main",{
-              listName: date.getDate(),
-              newItemList: response.list
-                })
-          }
+    userZ.save(function(err) {
+      if (!err) {
+        res.render("main", {
+          listName: date.getDate(),
+          newItemList: userZ.list
         })
-        }
+      }
     });
-
-  } else  {
-    user.findOne({username:userZ.username},function(err,response){
-        if(!err)
-        {
-
-            // console.log(response.newList);
-            (response.newList).forEach(function(item){
-              if(item.name==abc){
-                item.list.push(itemName);
-                response.save(function(err){if(!err){
-                  // console.log(item.list);
-                  res.render("list",{
-                  listName:item.name,
-                  newItemList:item.list
-                    })
-                }});
-              }
-                })
-              }
-});
-                }
-                })
+  } else {
+    (userZ.newList).forEach(function(item) {
+      if (item.name == button) {
+        item.list.push(itemName);
+        userZ.save(function(err) {
+          if (!err) {
+            res.render("list", {
+              listName: item.name,
+              newItemList: item.list
+            })
+          }
+        });
+      }
+    })
+  }
+})
 
 app.get("/about", function(req, res) {
   res.render("about")
 });
 
-app.post("/delete", function(req, res)
-{
+app.post("/delete", function(req, res) {
   const listName = req.body.listName;
   const checkBoxId = req.body.checkBox;
   if (listName == date.getDate()) {
     user.findOneAndUpdate({
-      username:userZ.username
+      username: userZ.username
     }, {
       $pull: {
         list: {
           _id: checkBoxId
         }
       }
-    }, function(err,found) {
-      if (!err){
-        user.findOne({username:userZ.username},function(err,response){
-          if(!err)
-          {
-            userZ=response;
-            res.render("main",{
+    }, function(err, found) {
+      if (!err) {
+        user.findOne({
+          username: userZ.username
+        }, function(err, result) {
+          if (!err) {
+            userZ = result;
+            res.render("main", {
               listName: date.getDate(),
-              newItemList: response.list
-                })
+              newItemList: userZ.list
+            })
           }
         })
+      }
+    })
+  } else {
+    (userZ.newList).forEach(function(item) {
+      (item.list).forEach(function(subitem) {
+        if (subitem._id == checkBoxId) {
+          item.list.remove(subitem);
+          userZ.save(function(err) {
+            if (!err) {
+              (userZ.newList).forEach(function(item) {
+                if (item.name == listName) {
+                  res.render("list", {
+                    listName: item.name,
+                    newItemList: item.list
+                  })
+                }
+              })
+            }
+          });
         }
       })
-    }
-else  {
-  user.findOne({username:userZ.username},function(err,response){
-      if(!err)
-      {
-          // console.log(response.newList);
-          (response.newList).forEach(function(item){
-            (item.list).forEach(function(y){
-
-              if(y._id==checkBoxId){
-                console.log(y);
-                 item.list.remove(y);
-                response.save();
-                          // console.log(response.newList);
-                          (response.newList).forEach(function(item){
-                            if(item.name==listName){
-                              // console.log(item.list);
-                              res.render("list",{
-                              listName:item.name,
-                              newItemList:item.list
-                                })
-                }
-                })
-
-                }
-
-
-                }
-            )
-          });
-              }
-              })
-              }
+    });
+  }
 });
 
-app.get("/login",function(req,res){
-  res.render("main",{
+app.get("/login", function(req, res) {
+  res.render("main", {
     listName: date.getDate(),
     newItemList: userZ.list
   })
 });
-// app.get("/login/:category"||"/delete/:category"||"/login0.1/:category", function(req, res) {
-//   const category = _.capitalize(req.params.category);
-//   user.findOne({
-//     {username:userZ.username}
-//   }, function(err, result) {
-//     // console.log(result);
-//     if (err)
-//       console.log(err);
-//     else {
-//       if (!result) {
-//
-//
-//           user.updateOne({username:userZ.username},{$push:{newList:{list:defaultItems,name:category}}}, function(err) {
-//               if (err)
-//                 console.log(err);
-//               else{
-//                 user.findOne({username:userZ.username},function(err,response){
-//                   if(!err)
-//                   {
-//                       // console.log(response.newList);
-//                       (response.newList).forEach(function(item){
-//                         if(item.name==category){
-//                           console.log(item.list);
-//                           res.render("list",{
-//                           listName:item.name,
-//                           newItemList:item.list
-//                             })
-//                         }
-//                       })
-//
-//                   }
-//                 })
-//                 }
-//                 });
-//
-//       } else {
-//         user.findOne({username:userZ.username},function(err,response){
-//           if(!err)
-//           {
-//
-//               (response.newList).forEach(function(item){
-//                 if(item.name==category){
-//                   res.render("list",{
-//                   listName:item.name,
-//                   newItemList:item.list
-//                     })
-//                 }
-//               })
-//
-//           }
-//         })
-//         }
-//     }
-//   })
-// })
+
 
 app.post("/addList", function(req, res) {
   const btn2 = _.capitalize(req.body.listName);
-  user.findOne({username:userZ.username},function(error,response){
-    if(!error)
-    {
-      // console.log(response.newList);
-if(response.newList.length==0)
-{
-  console.log("hi bye");
-  user.updateOne({username:userZ.username},{$push:{newList:{list:defaultItems,name:btn2}}}, function(err) {
-  if (err)
-    console.log(err);
-  else{
-    user.findOne({username:userZ.username},function(err,respons){
-      if(!err)
-      {
-          // console.log(respons.newList);
-          (respons.newList).forEach(function(items){
-            if(items.name==btn2){
-              console.log(items.list);
-              res.render("list",{
-              listName:items.name,
-              newItemList:items.list
+  if (userZ.newList.length == 0) {
+    user.updateOne({
+      username: userZ.username
+    }, {
+      $push: {
+        newList: {
+          list: defaultItems,
+          name: btn2
+        }
+      }
+    }, function(err) {
+      if (err)
+        console.log(err);
+      else {
+        user.findOne({
+          username: userZ.username
+        }, function(err, result) {
+          if (!err) {
+            userZ = result;
+            (userZ.newList).forEach(function(items) {
+              if (items.name == btn2) {
+                console.log(items.list);
+                res.render("list", {
+                  listName: items.name,
+                  newItemList: items.list
                 })
-}
-})
-}
-})
-}
-});
-}
-else {
-  (response.newList).forEach(function(it){
-    if(it.name==btn2){
-      charles=true;
-      // console.log(it.name);
-          res.render("list",{
-          listName:it.name,
-          newItemList:it.list
+              }
+            })
+          }
+        })
+      }
+    });
+  } else {
+    (userZ.newList).forEach(function(item) {
+      if (item.name == btn2) {
+        x = true;
+        res.render("list", {
+          listName: item.name,
+          newItemList: item.list
         });
       }
     });
-    if(charles!=true)
-      {
-      // user.findOne({username:userZ.username}, function(err,test) {
-      //   console.log(test);
-      //   if(!err){
-          user.updateOne({username:userZ.username},{$push:{newList:{list:defaultItems,name:btn2}}}, function(err) {
-          if (err)
-            console.log(err);
-          else{
-            console.log("error");
-            user.findOne({username:userZ.username},function(err,respons){
-              if(!err)
-              {
-                  console.log(respons.newList);
-                  (respons.newList).forEach(function(item){
-                    if(item.name==btn2){
-                      console.log(item.list);
-                      res.render("list",{
-                      listName:item.name,
-                      newItemList:item.list
-                        })
+    if (x != true) {
+      user.updateOne({
+        username: userZ.username
+      }, {
+        $push: {
+          newList: {
+            list: defaultItems,
+            name: btn2
+          }
         }
-        })
-        }
-        })
+      }, function(err) {
+        if (err)
+          console.log(err);
+        else {
+          user.findOne({
+            username: userZ.username
+          }, function(err, result) {
+            if (!err) {
+              userZ = result;
+              (userZ.newList).forEach(function(item) {
+                if (item.name == btn2) {
+                  console.log(item.list);
+                  res.render("list", {
+                    listName: item.name,
+                    newItemList: item.list
+                  })
+                }
+              })
+            }
+          })
         }
       });
-        };
-        }
-        }
+    };
+  }
 
-        //   }
-        // )};
-
-        });
-        });
+});
 app.listen(process.env.PORT || 3000, function() {
   console.log("Server running on port 3000");
 })
 
 
 // https://agile-sands-40636.herokuapp.com/
-// "mongodb+srv://admin_nisha:Star123@cluster0.waeg9.mongodb.net/todolistDB"
+// "mongodb+srv://admin_nisha:"password"@cluster0.waeg9.mongodb.net/todolistDB"
+// "mongodb://localhost:27017/todolistDB"
