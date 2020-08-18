@@ -16,9 +16,9 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
-
+const password=process.env.password;
 const mongoose = require("mongoose");
-mongoose.connect("mongodb+srv://admin_nisha:+"password"@cluster0.waeg9.mongodb.net/todolistDB", {
+mongoose.connect("mongodb+srv://admin_nisha:"+password+"@cluster0.waeg9.mongodb.net/todolistDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
@@ -320,5 +320,5 @@ app.listen(process.env.PORT || 3000, function() {
 
 
 // https://agile-sands-40636.herokuapp.com/
-// "mongodb+srv://admin_nisha:"password"@cluster0.waeg9.mongodb.net/todolistDB"
+// "mongodb+srv://admin_nisha:+"password"+@cluster0.waeg9.mongodb.net/todolistDB"
 // "mongodb://localhost:27017/todolistDB"
